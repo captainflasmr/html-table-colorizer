@@ -6,11 +6,9 @@
 #+todo: TODO DOING | DONE
 #+startup: showall
 
-* HTML Table Colorizer
-
 An Emacs package for colorizing HTML table rows based on text content. It's particularly useful for enhancing tables exported from Org mode or other markup formats.
 
-** Features
+* Features
 
 - Apply colors to HTML table rows based on cell content
 - Support for multiple coloring algorithms:
@@ -22,9 +20,9 @@ An Emacs package for colorizing HTML table rows based on text content. It's part
 - Interactive commands for processing HTML files
 - Customizable color rules and algorithms
 
-** Installation
+* Installation
 
-*** Manual Installation
+** Manual Installation
 
 1. Download the =html-table-colorizer.el= file
 2. Add it to your load path
@@ -35,7 +33,7 @@ An Emacs package for colorizing HTML table rows based on text content. It's part
 (require 'html-table-colorizer)
 #+end_src
 
-*** With =use-package= (recommended)
+** With =use-package= (recommended)
 
 #+begin_src elisp
 (use-package html-table-colorizer
@@ -45,9 +43,9 @@ An Emacs package for colorizing HTML table rows based on text content. It's part
   (htc-setup-modern-theme))
 #+end_src
 
-** Usage
+* Usage
 
-*** Define Highlighting Rules
+** Define Highlighting Rules
 
 The package works by defining rules that match text content in table cells and applying colors to the entire row:
 
@@ -60,13 +58,13 @@ The package works by defining rules that match text content in table cells and a
                ("DONE" . "#eeecff")))))
 #+end_src
 
-*** Interactive Commands
+** Interactive Commands
 
 - =M-x htc-colorize-html-buffer= - Process the current HTML buffer
 - =M-x htc-colorize-html-file= - Process an HTML file
 - =M-x htc-colorize-current-html-export= - Process the HTML file exported from the current Org file
 
-*** With Org Mode
+** With Org Mode
 
 Enable automatic processing after org-html export:
 
@@ -119,9 +117,9 @@ Available algorithms:
 - ='alternating= - Alternates saturation between rows
 - ='complementary= - Slight hue shifts for adjacent rows
 
-** Examples
+* Examples
 
-*** Org Mode Table With Highlighting
+** Org Mode Table With Highlighting
 
 When writing in Org mode:
 
@@ -139,7 +137,7 @@ With HTML export and table colorization, the table rows will be highlighted base
 1. Indentation level (number of "- " prefixes)
 2. Status keywords (TODO, DOING, DONE)
 
-*** Custom Pattern Matching
+** Custom Pattern Matching
 
 You can define rules to match any text pattern:
 
@@ -167,13 +165,13 @@ You can define rules to match any text pattern:
 (add-hook 'web-mode-hook 'html-table-colorizer-mode)
 #+end_src
 
-** License
+* License
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
 
-** Contributing
+* Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
