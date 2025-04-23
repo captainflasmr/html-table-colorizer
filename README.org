@@ -1,0 +1,179 @@
+#+title: HTML Table Colorizer
+#+author: James Dyer
+#+email: captainflasmr@gmail.com
+#+language: en
+#+options: ':t toc:nil author:nil email:nil num:nil title:nil
+#+todo: TODO DOING | DONE
+#+startup: showall
+
+* HTML Table Colorizer
+
+An Emacs package for colorizing HTML table rows based on text content. It's particularly useful for enhancing tables exported from Org mode or other markup formats.
+
+** Features
+
+- Apply colors to HTML table rows based on cell content
+- Support for multiple coloring algorithms:
+  - HSL-based gradients for better perceptual uniformity
+  - Alternating saturation for better row distinction
+  - Complementary color shifts for enhanced readability
+  - Predefined palettes: Modern UI, Solarized, Material Design, and more
+- Automatic integration with Org mode HTML export
+- Interactive commands for processing HTML files
+- Customizable color rules and algorithms
+
+** Installation
+
+*** Manual Installation
+
+1. Download the =html-table-colorizer.el= file
+2. Add it to your load path
+3. Require the package in your configuration:
+
+#+begin_src elisp
+(add-to-list 'load-path "/path/to/html-table-colorizer")
+(require 'html-table-colorizer)
+#+end_src
+
+*** With =use-package= (recommended)
+
+#+begin_src elisp
+(use-package html-table-colorizer
+  :load-path "/path/to/html-table-colorizer"
+  :hook (org-mode . html-table-colorizer-mode)
+  :config
+  (htc-setup-modern-theme))
+#+end_src
+
+** Usage
+
+*** Define Highlighting Rules
+
+The package works by defining rules that match text content in table cells and applying colors to the entire row:
+
+#+begin_src elisp
+(setq htc-highlight-rules
+      `((th . (("Requirement" . "#5089be")))  ;; Headers
+        (td . (,@(htc-generate-mono-blue-rules "- " 8)  ;; Pattern-based rules
+               ("TODO" . "#ffe9e7")  ;; Keyword-based rules
+               ("DOING" . "#e7ffe9")
+               ("DONE" . "#eeecff")))))
+#+end_src
+
+*** Interactive Commands
+
+- =M-x htc-colorize-html-buffer= - Process the current HTML buffer
+- =M-x htc-colorize-html-file= - Process an HTML file
+- =M-x htc-colorize-current-html-export= - Process the HTML file exported from the current Org file
+
+*** With Org Mode
+
+Enable automatic processing after org-html export:
+
+#+begin_src elisp
+(add-hook 'org-export-html-final-hook 'htc-colorize-current-html-export)
+#+end_src
+
+** Predefined Themes
+
+The package includes several predefined color themes:
+
+- =htc-setup-modern-theme= - Modern UI with subtle blues and grays
+- =htc-setup-solarized-theme= - Solarized-inspired palette easy on the eyes
+- =htc-setup-material-theme= - Material Design inspired colors
+
+** Customizing Colors
+
+*** Using Predefined Palettes
+
+#+begin_src elisp
+(setq htc-highlight-rules
+      `((th . (("Header" . "#4a5568")))
+        (td . (,@(htc-generate-material-rules "- " 8)
+               ("TODO" . "#ffe9e7")))))
+#+end_src
+
+Available palettes:
+- =htc-generate-modern-ui-rules=
+- =htc-generate-solarized-rules=
+- =htc-generate-material-rules=
+- =htc-generate-mono-blue-rules=
+- =htc-generate-green-blue-rules=
+- =htc-generate-pastel-rules=
+- =htc-generate-light-zebra-rules=
+
+*** Using Color Algorithms
+
+For more control, use the generic rule generator with specific algorithm:
+
+#+begin_src elisp
+(setq htc-highlight-rules
+      `((th . (("Header" . "#5089be")))
+        (td . (,@(htc-generate-pattern-rules "- " 8 "#649dd2" 'hsl)
+               ("TODO" . "#ffe9e7")))))
+#+end_src
+
+Available algorithms:
+- ='basic= - Simple RGB gradient toward white
+- ='hsl= - HSL-based gradient for better perceptual uniformity
+- ='alternating= - Alternates saturation between rows
+- ='complementary= - Slight hue shifts for adjacent rows
+
+** Examples
+
+*** Org Mode Table With Highlighting
+
+When writing in Org mode:
+
+#+begin_src org
+#+TITLE: Project Status
+
+| Requirement | Status | Notes           |
+|-------------+--------+-----------------|
+| - Feature A | TODO   | Waiting for API |
+| - Feature B | DOING  | In progress     |
+| - Feature C | DONE   | Completed       |
+#+end_src
+
+With HTML export and table colorization, the table rows will be highlighted based on:
+1. Indentation level (number of "- " prefixes)
+2. Status keywords (TODO, DOING, DONE)
+
+*** Custom Pattern Matching
+
+You can define rules to match any text pattern:
+
+#+begin_src elisp
+(setq htc-highlight-rules
+      `((th . (("Requirement" . "#5089be")))
+        (td . (("High" . "#ffcdd2")      ;; High priority in red
+               ("Medium" . "#fff9c4")    ;; Medium priority in yellow
+               ("Low" . "#c8e6c9")       ;; Low priority in green
+               ,@(htc-generate-pattern-rules "- " 8 "#649dd2" 'hsl)))))
+#+end_src
+
+** Integration with Other Packages
+
+*** With ox-html (Org Export)
+
+#+begin_src elisp
+(with-eval-after-load 'ox-html
+  (add-hook 'org-export-html-final-hook 'htc-colorize-current-html-export))
+#+end_src
+
+*** With web-mode
+
+#+begin_src elisp
+(add-hook 'web-mode-hook 'html-table-colorizer-mode)
+#+end_src
+
+** License
+
+This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+** Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
